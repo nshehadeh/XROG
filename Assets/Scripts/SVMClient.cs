@@ -13,7 +13,7 @@ public class SVMClient : MonoBehaviour
     [System.Serializable]
     public class JsonResponse
     {
-        public List<int> predictions;
+        public float[] predictions;
     }
 
 
@@ -57,11 +57,16 @@ public class SVMClient : MonoBehaviour
         }
 
         // Get the predicted label from the response
-        int prediction = JsonUtility.FromJson<JsonResponse>(request.downloadHandler.text).predictions[0];
+        string jsonResponseText = request.downloadHandler.text;
+        UnityEngine.Debug.Log("JSON Response: " + jsonResponseText);
+
+        JsonResponse jsonResponse = JsonUtility.FromJson<JsonResponse>("{\"predictions\":" + jsonResponseText + "}");
+        int prediction = Mathf.RoundToInt(jsonResponse.predictions[0]);
 
         // Call the callback function with the predicted label
         callback(prediction);
     }
+
     public static string ToJson<T>(T obj)
     {
         return JsonUtility.ToJson(obj);

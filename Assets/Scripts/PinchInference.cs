@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 
 using static System.Net.Mime.MediaTypeNames;
+using System.Collections.Specialized;
 
 public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
 {
@@ -48,7 +49,7 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
         indexObject.GetComponent<Renderer>().enabled = false;
         //make sure count is enough
         int prediction = -1;
-
+        Vector3 lastPoint = currentSequence[currentSequence.Count - 1];
         if (currentSequence.Count > 30)
         {
             UnityEngine.Debug.Log("Attempting inference on " + currentSequence.Count + " frames");
@@ -56,13 +57,15 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
             {
                 prediction = result;
                 UnityEngine.Debug.Log("PREDICTION: " + prediction);
-            }));
+                if (prediction > -1)
+                {
+                    UnityEngine.Debug.Log("Generating object at location: " + lastPoint);
+                    generate_object(prediction, lastPoint);
 
+                }
+            }));
         }
-        if (prediction > -1)
-            generate_object(prediction, currentSequence[currentSequence.Count - 1]);
-        //get prediction
-        //clear sequence
+        UnityEngine.Debug.Log("Clearing sequence");
         currentSequence.Clear();
 
     }
@@ -114,6 +117,9 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
         {
             // Instantiate the prefab at the specified position with no rotation
             GameObject newObject = Instantiate(prefabs[prefabIndex], position, Quaternion.identity);
+            if(prefabIndex == 0)
+                newObject.transform.rotation *= Quaternion.Euler(0, 90, 0);
+
             newObject.transform.SetParent(transform); // Set the new object as a child of the ObjectGenerator
         }
         else

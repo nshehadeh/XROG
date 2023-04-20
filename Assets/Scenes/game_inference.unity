@@ -477,6 +477,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   svmClient: {fileID: 73955560}
+  prefabs:
+  - {fileID: 711134613797766603, guid: 6b0a997d987774244a87d3d6f6e43df8, type: 3}
+  - {fileID: 7666448512491557995, guid: 6eb18d9d451e45e4bb30bf34fdb5dbfb, type: 3}
+  - {fileID: 1187546458036812, guid: d5aeb9c866c9c56428af104ef949e9ca, type: 3}
   sphereMarker: {fileID: 8278697350477743935, guid: 50b3ade2749be5446983cc51e706efec, type: 3}
 --- !u!4 &1323048601
 Transform:

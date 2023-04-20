@@ -19,6 +19,7 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
     private int predictionResult;
 
     private IMixedRealityInputSystem inputSystem;
+    public GameObject[] prefabs;
 
     public GameObject sphereMarker;
 
@@ -46,10 +47,11 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
         thumbObject.GetComponent<Renderer>().enabled = false;
         indexObject.GetComponent<Renderer>().enabled = false;
         //make sure count is enough
-        if(currentSequence.Count > 30)
+        int prediction = -1;
+
+        if (currentSequence.Count > 30)
         {
             UnityEngine.Debug.Log("Attempting inference on " + currentSequence.Count + " frames");
-            int prediction = 0;
             StartCoroutine(svmClient.GetPrediction(currentSequence, result =>
             {
                 prediction = result;
@@ -57,6 +59,8 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
             }));
 
         }
+        if (prediction > -1)
+            generate_object(prediction, currentSequence[currentSequence.Count - 1]);
         //get prediction
         //clear sequence
         currentSequence.Clear();
@@ -101,5 +105,20 @@ public class PinchInference : MonoBehaviour, IMixedRealityPointerHandler
     void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData)
     {
         // Requirement for implementing the interface
+    }
+
+    public void generate_object(int prefabIndex, Vector3 position)
+    {
+        // Check if the prefabIndex is within the range of available prefabs
+        if (prefabIndex >= 0 && prefabIndex < prefabs.Length)
+        {
+            // Instantiate the prefab at the specified position with no rotation
+            GameObject newObject = Instantiate(prefabs[prefabIndex], position, Quaternion.identity);
+            newObject.transform.SetParent(transform); // Set the new object as a child of the ObjectGenerator
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("Invalid prefab index.");
+        }
     }
 }

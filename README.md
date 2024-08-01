@@ -46,6 +46,8 @@ XROG provides an interactive, gesture-based environment for object generation in
 3) Host app.py on Heroku using Flask
 4) Enter Unity environment and use PinchInference.cs to generate the included prefabs in your AR environment
 
-Requires Unity and a MRTK compatible headset, this project was done using a Hololens2
+Requires Unity and a MRTK compatible headset, this project was done using a Hololens2.
 
-Reach out to me with any questions
+See report.pdf for more details.
+
+Reach out to me with any questions.
